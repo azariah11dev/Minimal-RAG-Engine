@@ -1,0 +1,24 @@
+# -------------------------
+# Python
+# -------------------------
+__pycache__/
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env
+
+# -------------------------
+# Qdrant local storage
+# -------------------------
+models/files/
+models/qdrant_db/
+qdrant_db/
+*/qdrant_db/
+
+# -------------------------
+# Uploaded documents
+# -------------------------
+models/files/
+*/models/files/

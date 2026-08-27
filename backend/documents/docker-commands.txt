@@ -1,0 +1,111 @@
+========================================
+DOCKER COMMANDS — QUICK REFERENCE
+========================================
+
+# --- BASIC DOCKER COMMANDS ---
+
+# Check Docker version
+docker --version
+
+# List running containers
+docker ps
+
+# List ALL containers (including stopped)
+docker ps -a
+
+# List all images
+docker images
+
+# List all volumes
+docker volume ls
+
+# Show Docker system info
+docker info
+
+
+========================================
+DOCKER COMPOSE COMMANDS
+========================================
+
+# Start all services in the background
+docker compose up -d
+
+# Stop and remove containers (but keep volumes)
+docker compose down
+
+# Stop and remove containers AND volumes (wipe data)
+docker compose down -v
+
+# Rebuild containers after changing Dockerfile
+docker compose up -d --build
+
+# View logs for a specific service
+docker compose logs postgres
+
+# Follow logs in real time
+docker compose logs -f postgres
+
+# Stop containers
+docker compose stop
+
+
+========================================
+CONTAINER MANAGEMENT
+========================================
+
+# Restart a container
+docker restart <container_name>
+
+# Stop a container
+docker stop <container_name>
+
+# Remove a container
+docker rm <container_name>
+
+# Remove an image
+docker rmi <image_name>
+
+# Remove a volume
+docker volume rm <volume_name>
+
+
+========================================
+EXEC INTO A RUNNING CONTAINER
+========================================
+
+# Open a shell inside a container
+docker exec -it <container_name> bash
+
+# For Postgres containers (psql shell)
+docker exec -it <container_name> psql -U postgres
+
+
+========================================
+CLEANUP COMMANDS
+========================================
+
+# Remove all stopped containers
+docker container prune
+
+# Remove all unused images
+docker image prune
+
+# Remove all unused volumes
+docker volume prune
+
+# Remove EVERYTHING unused (careful!)
+docker system prune -a
+
+
+========================================
+POSTGRES-SPECIFIC COMMANDS
+========================================
+
+# Connect to Postgres inside the container
+docker exec -it <container_name> psql -U postgres
+
+# Check Postgres logs
+docker logs <container_name>
+
+# Restart Postgres container
+docker restart <container_name>

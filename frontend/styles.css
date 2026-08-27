@@ -1,0 +1,100 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 40px;
+}
+
+.container {
+    max-width: 500px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #ccc;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/*
+--------------------------------
+chat box
+--------------------------------
+*/
+.rag-chat-input {
+    width: 100%;
+    padding: 5px;
+    display: flex;
+    gap: 5px;
+    flex-direction: row;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+#queryButton {
+    padding: 6px;
+    background: #0078ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#queryButton:hover {
+    background: #005fcc;
+    transform: scale(1.05);
+}
+
+/*
+--------------------------------
+upload document
+--------------------------------
+*/
+#uploadForm {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.form-button-holder {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+#uploadButton {
+    width: 50%;
+    padding: 6px;
+    background: #0078ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+#uploadButton:hover {
+    background: #005fcc;
+    transform: scale(1.05);
+}

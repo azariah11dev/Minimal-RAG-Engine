@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Minimal RAG Engine</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js"></script>
+</head>
+<body>
+    <h1>Chat With Your Documents</h1>
+
+    <div class="container">
+        <div class="rag-chat">
+            <div class="rag-chat-response" id="responseBox"></div>
+            <div class="rag-chat-input">
+                <input type="text" id="queryInput" placeholder="Enter your query here..." />
+                <button id="queryButton">Submit</button>
+            </div>
+        </div>
+
+        <form id="uploadForm">
+            <div>
+                <label for="fileInput">Choose a file:</label>
+                <input type="file" id="fileInput" accept=".txt,.pdf,.docx" required>
+            </div>
+            <div class="form-button-holder">
+                <button id="uploadButton" type="submit">Upload</button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
