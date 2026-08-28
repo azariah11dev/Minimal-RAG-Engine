@@ -22,10 +22,8 @@ qdrant_db/
 # -------------------------
 # Uploaded documents
 # -------------------------
-models/files/
-*/models/files/
-
-backend/docmuntents/test_documents/
+backend/src/models/files/
+backend/documents/test_documents/
 
 # -------------------------
 # Express
