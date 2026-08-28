@@ -8,6 +8,8 @@ venv/
 env/
 .venv/
 .env
+.env.local
+.env.*.local
 
 # -------------------------
 # Qdrant local storage
@@ -22,3 +24,21 @@ qdrant_db/
 # -------------------------
 models/files/
 */models/files/
+
+backend/docmuntents/test_documents/
+
+# -------------------------
+# Express
+# -------------------------
+# Node dependencies
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS junk
+.DS_Store
+Thumbs.db

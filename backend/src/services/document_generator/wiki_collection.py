@@ -1,8 +1,6 @@
 import os
 import wikipedia
 
-wikipedia.set_lang("en")
-
 articles = ["OpenAI", "Microsoft"]
 
 def main():
@@ -27,10 +25,10 @@ def main():
 
             print(f"Saved: {file_path}")
 
-        except wikipedia.exceptions.DisambiguationError as e:
+        except wikipedia.DisambiguationError as e:
             print(f"Disambiguation for {article}: {e.options}")
 
-        except wikipedia.exceptions.PageError:
+        except wikipedia.PageError:
             print(f"Page not found: {article}")
 
         except Exception as e:

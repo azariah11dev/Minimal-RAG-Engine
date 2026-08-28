@@ -35,7 +35,7 @@ async def upload_document(file: UploadFile = File(...)):
 
         # Process with DocumentHandler
         handler = documentHandler(file_path=file_path, file_name=file.filename)
-        handler.load_document()
+        handler.process_and_ingest()
 
         return {"message": "Document uploaded and processed successfully."}
 

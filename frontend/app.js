@@ -1,12 +1,14 @@
-if (document.querySelector(".container")) {
-    const uploadForm = document.getElementById("uploadButton");
+document.addEventListener("DOMContentLoaded", () => {
+    const uploadForm = document.getElementById("uploadForm");
     const fileInput = document.getElementById("fileInput");
-    uploadDocument(fileInput);
+
+    setupUploadHandler(uploadForm, fileInput);
 
     const responseBox = document.getElementById("responseBox");
     const queryButton = document.getElementById("queryButton");
     const queryInput = document.getElementById("queryInput");
-}
+});
+
 
  // -----------------------------
 // Query Handler (under construction ignore for now)
@@ -40,7 +42,7 @@ async function streamResponse(query) {
 // -----------------------------
 // File Upload Handler
 // -----------------------------
-async function uploadDocument(fileContent) {
+async function setupUploadHandler(uploadForm, fileInput) {
     uploadForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -56,7 +58,7 @@ async function uploadDocument(fileContent) {
         try {
             const res = await fetch("http://localhost:8000/document_uploader/upload", {
                 method: "POST",
-                body: formData   // DO NOT set Content-Type manually
+                body: formData
             });
 
             const data = await res.json();
