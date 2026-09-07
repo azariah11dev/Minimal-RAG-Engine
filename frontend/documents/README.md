@@ -1,214 +1,319 @@
-# Minimal RAG Engine — Frontend
+# 📘 Minimal RAG Frontend
 
-A lightweight web interface for interacting with the **Minimal RAG Engine**.
+A lightweight frontend for interacting with the **Minimal RAG Engine** backend.
 
-The frontend allows users to upload documents and ask questions about their contents through a FastAPI backend. The backend handles document processing, embeddings, vector storage, retrieval, and LLM-powered response generation.
-
-The frontend is intentionally simple:
-
-* **HTML**
-* **CSS**
-* **Vanilla JavaScript**
-* **Express**
-
-No frontend framework, bundler, or build step is required.
-
----
-
-## 📖 About the Project
-
-The Minimal RAG Engine is a small Retrieval-Augmented Generation (RAG) application designed to demonstrate the core components of a document question-answering system.
-
-The overall workflow is:
+The interface provides a simple document-to-answer workflow:
 
 ```text
-Document
-    ↓
-FastAPI Backend
-    ↓
-Text Extraction
-    ↓
-Chunking
-    ↓
-Embeddings
-    ↓
+Upload Document
+      ↓
+RAG Backend
+      ↓
+Document Ingestion
+      ↓
 Qdrant
-    ↓
-User Query
-    ↓
-Vector Retrieval
-    ↓
-Context
-    ↓
-LLM
-    ↓
-Response
+      ↓
+Ask Question
+      ↓
+RAG Retrieval
+      ↓
+LLM Generation
+      ↓
+Stream Response
+      ↓
+Frontend
 ```
 
-This repository contains only the **frontend interface**.
-
-The frontend communicates with the FastAPI backend through HTTP requests.
+The frontend is intentionally built without a JavaScript framework or build system. The goal is to provide a small, understandable interface that demonstrates the interaction between a browser-based client and a RAG backend.
 
 ---
 
 ## 🚀 Features
 
-### 📄 Document Upload
+* 📄 Document upload
+* Supports:
 
-Users can upload:
-
-* `.txt`
-* `.pdf`
-* `.docx`
-
-Uploaded files are sent to:
-
-```http
-POST /document_uploader/upload
-```
-
-The FastAPI backend is responsible for:
-
-* File handling
-* Text extraction
-* Document chunking
-* Embedding generation
-* Vector insertion into Qdrant
-
-The frontend simply handles file selection and submission.
+  * `.pdf`
+  * `.docx`
+  * `.txt`
+* 💬 Natural-language query input
+* ⚡ Live streaming of LLM responses
+* 🔗 Direct integration with the RAG backend API
+* 🌐 Express static server
+* 🧩 Pure HTML, CSS, and JavaScript
+* 🚫 No React
+* 🚫 No frontend build tools
+* 🚫 No external UI framework
+* 🚫 No client-side state-management library
 
 ---
 
-### 💬 Chat With Your Documents
+# 🏗️ Architecture
 
-Users can enter a natural-language question about their uploaded documents.
-
-Queries are sent to:
-
-```http
-POST /query
-```
-
-The backend performs:
-
-1. Query embedding
-2. Vector similarity search
-3. Context retrieval
-4. Prompt construction
-5. LLM response generation
-
-The generated response is then returned to the frontend and displayed to the user.
-
----
-
-## 🏗 Architecture
-
-The frontend acts as the presentation layer of the RAG application.
+The frontend acts as a thin client over the RAG backend.
 
 ```text
-┌──────────────────────────────┐
-│          Browser             │
-│                              │
-│  HTML / CSS / JavaScript     │
-└──────────────┬───────────────┘
-               │
-               │ HTTP
-               ▼
-┌──────────────────────────────┐
-│       FastAPI Backend        │
-│                              │
-│  Document Processing         │
-│  Retrieval                   │
-│  Generation                  │
-└──────────────┬───────────────┘
-               │
-        ┌──────┴──────┐
-        ▼             ▼
-┌──────────────┐ ┌──────────────┐
-│    Qdrant    │ │     LLM      │
-│ Vector Store │ │  Generation  │
-└──────────────┘ └──────────────┘
+┌──────────────────────────┐
+│        Browser           │
+│                          │
+│  ┌────────────────────┐  │
+│  │  Document Upload   │  │
+│  └─────────┬──────────┘  │
+│            │             │
+│  ┌─────────▼──────────┐  │
+│  │    Query Input     │  │
+│  └─────────┬──────────┘  │
+│            │             │
+│  ┌─────────▼──────────┐  │
+│  │ Streaming Response │  │
+│  └────────────────────┘  │
+└────────────┬─────────────┘
+             │
+             │ HTTP
+             ▼
+┌──────────────────────────┐
+│     FastAPI Backend      │
+│                          │
+│  Document Ingestion      │
+│  Retrieval               │
+│  Reranking               │
+│  LLM Generation          │
+└────────────┬─────────────┘
+             │
+             ▼
+        ┌──────────┐
+        │  Qdrant  │
+        └──────────┘
 ```
 
-### Frontend → Backend
+The frontend does not perform embedding, retrieval, reranking, or LLM inference itself.
 
-The frontend communicates with the FastAPI application using standard HTTP requests.
+It is responsible for:
 
-### Backend → Qdrant
-
-The backend stores document embeddings and performs vector similarity searches using Qdrant.
-
-### Backend → LLM
-
-Retrieved document context is provided to an LLM to generate the final response.
+1. Sending documents to the backend
+2. Sending user questions to the backend
+3. Reading streamed responses
+4. Updating the UI as response data arrives
 
 ---
 
-## 📁 Project Structure
+# 📁 Project Structure
 
 ```text
 frontend/
-├── index.html
-├── styles.css
+│
+├── documents/
+│   └── README.md
+│
 ├── app.js
+├── index.html
+├── package-lock.json
+├── package.json
 ├── server.js
-└── package.json
+└── styles.css
 ```
 
-### `index.html`
+## File Overview
 
-The main application interface.
-
-Contains:
-
-* Document upload form
-* File selector
-* Query input
-* Submit button
-* Response display area
-
----
-
-### `styles.css`
-
-Contains the application's basic styling.
-
-The UI is intentionally minimal so that the focus remains on the RAG functionality rather than frontend complexity.
+| File                  | Purpose                                                          |
+| --------------------- | ---------------------------------------------------------------- |
+| `index.html`          | Main UI layout containing the document upload and chat interface |
+| `styles.css`          | Application styling                                              |
+| `app.js`              | Client-side logic for uploads, queries, and streamed responses   |
+| `server.js`           | Express server responsible for serving the frontend              |
+| `package.json`        | Node.js project metadata and dependencies                        |
+| `package-lock.json`   | Locked Node.js dependency versions                               |
+| `documents/README.md` | Additional project documentation                                 |
 
 ---
 
-### `app.js`
+# 🔧 Backend Integration
 
-Contains the frontend application logic.
+The frontend communicates with two primary backend endpoints.
 
-Responsible for:
+| Method | Endpoint                      | Purpose                                               |
+| ------ | ----------------------------- | ----------------------------------------------------- |
+| `POST` | `/document_uploader/upload`   | Upload and process a document                         |
+| `POST` | `/response_generation/answer` | Submit a question and receive a streamed RAG response |
 
-* Handling document uploads
-* Sending files to FastAPI
-* Submitting user queries
-* Sending HTTP requests
-* Processing backend responses
-* Rendering responses in the UI
+The backend is expected to run at:
+
+```text
+http://localhost:8000
+```
+
+The frontend runs at:
+
+```text
+http://localhost:3000
+```
 
 ---
 
-### `server.js`
+# 📄 Document Upload
 
-A small Express server used to serve the frontend files.
+Documents are uploaded using `multipart/form-data`.
 
-No frontend compilation or build process is required.
+The frontend creates a `FormData` object and sends the selected file to the backend.
+
+### Request
+
+```javascript
+const formData = new FormData();
+
+formData.append("file", file);
+
+fetch("http://localhost:8000/document_uploader/upload", {
+    method: "POST",
+    body: formData
+});
+```
+
+The backend accepts:
+
+* PDF
+* DOCX
+* TXT
+
+The frontend does not process the document itself. The uploaded file is passed directly to the RAG backend for ingestion.
 
 ---
 
-## 🛠️ Requirements
+## Backend Processing
 
-Before running the frontend, make sure you have:
+Once the backend receives the document, it handles the ingestion pipeline:
 
-* **Node.js**
-* **npm**
-* A running Minimal RAG Engine FastAPI backend
+```text
+File Upload
+     ↓
+Text Extraction
+     ↓
+Recursive Chunking
+     ↓
+Embedding Generation
+     ↓
+Qdrant Storage
+```
 
-The frontend currently expects the backend to run at:
+The frontend receives the resulting API response:
+
+```json
+{
+  "message": "Document uploaded and processed successfully."
+}
+```
+
+---
+
+# 💬 Query Interface
+
+Users can submit natural-language questions through the chat interface.
+
+Questions are sent to:
+
+```text
+POST /response_generation/answer
+```
+
+The request body contains the user's question:
+
+```json
+{
+  "question": "What does the document say about quantum entanglement?"
+}
+```
+
+The backend then performs the RAG pipeline:
+
+```text
+User Question
+      ↓
+Query Rewriting
+      ↓
+Query Embedding
+      ↓
+Dense Retrieval
+      ↓
+Cross-Encoder Reranking
+      ↓
+Context Assembly
+      ↓
+LLM Generation
+```
+
+---
+
+# ⚡ Streaming Responses
+
+One of the primary purposes of the frontend is demonstrating **streamed LLM output**.
+
+Rather than waiting for the complete answer before updating the interface, the browser reads the response body incrementally.
+
+```javascript
+const reader = res.body.getReader();
+const decoder = new TextDecoder();
+
+while (true) {
+    const { done, value } = await reader.read();
+
+    if (done) break;
+
+    responseBox.innerText += decoder.decode(value);
+}
+```
+
+This produces a progressively updating response:
+
+```text
+Quantum
+```
+
+```text
+Quantum entanglement
+```
+
+```text
+Quantum entanglement is a physical phenomenon...
+```
+
+The result is a more responsive chat experience while the backend LLM is generating the answer.
+
+---
+
+# 🌐 Express Static Server
+
+The frontend uses a minimal Node/Express server to host the static application.
+
+The server serves the project directory using Express's static middleware:
+
+```javascript
+app.use(express.static(path.join(__dirname)));
+```
+
+This allows the frontend to be served locally without:
+
+* Webpack
+* Vite
+* React
+* Next.js
+* Angular
+* Vue
+* Other frontend build systems
+
+The Express server is simply responsible for making the HTML, CSS, and JavaScript available to the browser.
+
+---
+
+# ▶️ Running the Frontend
+
+## Requirements
+
+* Node.js 18+
+* npm
+* Modern web browser
+* Running RAG backend
+
+The backend should be available at:
 
 ```text
 http://localhost:8000
@@ -216,22 +321,17 @@ http://localhost:8000
 
 ---
 
-## 🚀 Running the Frontend
+## 1. Install Dependencies
 
-### 1. Clone the repository
-
-```bash
-git clone <repository-url>
-cd frontend
-```
-
-### 2. Install dependencies
+From the frontend directory:
 
 ```bash
 npm install
 ```
 
-### 3. Start the Express server
+---
+
+## 2. Start the Server
 
 ```bash
 node server.js
@@ -243,233 +343,237 @@ The frontend will be available at:
 http://localhost:3000
 ```
 
-### 4. Start the FastAPI backend
-
-The backend should be running separately at:
-
-```text
-http://localhost:8000
-```
-
-Once both services are running, open:
-
-```text
-http://localhost:3000
-```
+Open the URL in your browser.
 
 ---
 
-## 🔌 API Integration
+# 🔄 End-to-End Workflow
 
-The frontend communicates with two primary FastAPI endpoints.
+The complete application flow is:
 
-### Document Upload
-
-```javascript
-fetch("http://localhost:8000/document_uploader/upload", {
-    method: "POST",
-    body: formData
-});
-```
-
-The request contains the selected document as multipart form data.
-
-The backend then processes the document and stores its embeddings in Qdrant.
-
----
-
-### Query
-
-```javascript
-fetch("http://localhost:8000/query", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ query })
-});
-```
-
-The backend receives the user's question and performs the RAG workflow:
+### 1. Start the backend
 
 ```text
-Query
-  ↓
-Embedding
-  ↓
-Vector Search
-  ↓
-Relevant Chunks
-  ↓
+FastAPI
+   +
+Qdrant
+   +
+Ollama
+```
+
+### 2. Start the frontend
+
+```bash
+node server.js
+```
+
+### 3. Upload a document
+
+```text
+Browser
+   ↓
+POST /document_uploader/upload
+   ↓
+FastAPI
+   ↓
+Document Processing
+   ↓
+Qdrant
+```
+
+### 4. Ask a question
+
+```text
+Browser
+   ↓
+POST /response_generation/answer
+   ↓
+Query Processing
+   ↓
+Retrieval
+   ↓
+Reranking
+   ↓
 LLM
-  ↓
-Response
 ```
 
----
-
-## 🎨 UI Overview
-
-The interface contains two primary areas.
-
-### Chat Interface
-
-The chat section provides:
-
-* Response display
-* Query input
-* Submit button
-
-Users can enter questions about information contained in their uploaded documents.
-
----
-
-### Document Upload
-
-The upload section provides:
-
-* File selector
-* Upload button
-
-Supported file types:
+### 5. Stream the answer
 
 ```text
-.txt
-.pdf
-.docx
+LLM
+ ↓
+FastAPI
+ ↓
+HTTP Stream
+ ↓
+Browser
+ ↓
+Live UI Update
 ```
 
 ---
 
-## 🎯 Design Philosophy
+# 🧩 Design Philosophy
 
 This frontend intentionally avoids unnecessary complexity.
 
-There is:
+There is no:
 
-* No React
-* No Next.js
-* No TypeScript
-* No frontend state-management library
-* No bundler
-* No build pipeline
+* React component hierarchy
+* Frontend build pipeline
+* Global state management
+* UI component library
+* Client-side routing
+* Complex application framework
 
-The goal is to demonstrate the RAG system itself rather than introduce additional frontend abstractions.
-
-The application can therefore be understood by following a simple flow:
+Instead, the application consists of:
 
 ```text
-User Action
-    ↓
+HTML
+ +
+CSS
+ +
 JavaScript
-    ↓
-HTTP Request
-    ↓
-FastAPI
-    ↓
-RAG Pipeline
-    ↓
-HTTP Response
-    ↓
-JavaScript
-    ↓
-UI
+ +
+Express
 ```
+
+This makes the frontend easy to inspect and provides a clear demonstration of the underlying API interactions.
+
+The simplicity also keeps the focus on the actual RAG system rather than the frontend framework.
 
 ---
 
-## 🔗 Related Components
+# 📌 Current Limitations
 
-This frontend is designed to work with the Minimal RAG Engine backend.
+The frontend is intentionally minimal and currently has several limitations:
 
-The complete system consists of:
+* No authentication
+* No conversation persistence
+* No chat history
+* No document management interface
+* No document deletion
+* No progress tracking for large uploads
+* No citation/source visualization
+* No advanced error handling
+* Localhost-oriented configuration
+* Backend URL is currently configured directly in the frontend code
 
-```text
-Minimal RAG Engine
-│
-├── Frontend
-│   ├── HTML
-│   ├── CSS
-│   ├── JavaScript
-│   └── Express
-│
-└── Backend
-    ├── FastAPI
-    ├── Document Processing
-    ├── Chunking
-    ├── Embeddings
-    ├── Qdrant
-    └── LLM
-```
+These are deliberate tradeoffs for the project's current scope.
 
 ---
 
-## 📚 RAG Learning Series
+# 🛠️ Potential Improvements
 
-This project is part of a four-part series exploring how to build a RAG application with FastAPI.
+Future iterations could introduce:
 
-### Episode 1 — Store, Chunk & Embed
+### User Experience
 
-How documents are transformed into searchable vector data.
+* Chat history
+* Markdown rendering
+* Code-block formatting
+* Source/citation display
+* Upload progress indicators
+* Drag-and-drop uploads
+* Better error messages
 
-**Topics:**
+### RAG Features
+
+* Display retrieved sources
+* Show relevance scores
+* Document management
+* Conversation-aware retrieval
+* Multiple document collections
+
+### Infrastructure
+
+* Configurable backend URL
+* Environment-based configuration
+* Authentication
+* Production deployment
+* HTTPS
+* Reverse proxy configuration
+
+### Frontend Architecture
+
+If the application grows significantly, the UI could eventually be migrated to a framework such as React or Next.js.
+
+For the current project, however, a framework would add complexity without providing much additional value.
+
+---
+
+# 🎯 Purpose
+
+The **Minimal RAG Frontend** exists primarily as a thin client for the RAG backend.
+
+It demonstrates three fundamental application flows:
+
+```text
+┌──────────────────────┐
+│   Document Upload    │
+└──────────┬───────────┘
+           ↓
+┌──────────────────────┐
+│   Backend Ingestion  │
+└──────────────────────┘
+```
+
+```text
+┌──────────────────────┐
+│     User Query       │
+└──────────┬───────────┘
+           ↓
+┌──────────────────────┐
+│    RAG Retrieval     │
+└──────────┬───────────┘
+           ↓
+┌──────────────────────┐
+│    LLM Generation    │
+└──────────┬───────────┘
+           ↓
+┌──────────────────────┐
+│  Streamed Response   │
+└──────────────────────┘
+```
+
+The result is a small, dependency-light frontend that provides a complete browser interface to the **Minimal RAG Engine** while keeping the implementation easy to understand and extend.
+
+---
+
+## 📚 Related Project
+
+This frontend is designed to work with the **Minimal RAG Backend**, which handles:
 
 * Document ingestion
 * Text extraction
-* Chunking
-* Embeddings
-* Qdrant
+* Recursive chunking
+* Embedding generation
+* Qdrant vector storage
+* Dense retrieval
+* Cross-encoder reranking
+* Query rewriting
+* LLM response generation
+* Streaming responses
 
-### Episode 2 — Retrieval
+Together, the two components form a complete local RAG application:
 
-How the system finds relevant information when a user asks a question.
+```text
+             MINIMAL RAG SYSTEM
 
-**Topics:**
+┌──────────────────┐
+│  Minimal RAG     │
+│    Frontend      │
+└────────┬─────────┘
+         │ HTTP
+         ▼
+┌──────────────────┐
+│  Minimal RAG     │
+│     Backend      │
+└────────┬─────────┘
+         │
+    ┌────┴─────┐
+    ▼          ▼
+ Qdrant     Ollama
+```
 
-* Query embeddings
-* Vector similarity search
-* Top-K retrieval
-* Context selection
-
-### Episode 3 — Augmented Generation
-
-How retrieved information is provided to an LLM to generate a response.
-
-**Topics:**
-
-* Context construction
-* Prompt augmentation
-* LLM generation
-* Grounding
-* Source information
-
-### Episode 4 — IntelliDoc
-
-Combining the individual components into a complete document intelligence application.
-
-**Topics:**
-
-* Full-stack architecture
-* Document management
-* RAG pipeline
-* User interface
-* End-to-end workflow
-
----
-
-## 🔮 Future Improvements
-
-Potential improvements include:
-
-* Streaming LLM responses
-* Conversation history
-* Document management
-* Multiple document collections
-* Source citations
-* Improved error handling
-* Authentication
-* Upload progress indicators
-* Better chat interface
-* Retrieval evaluation
-* Hybrid search
-* Reranking
+**Status:** Functional frontend / ongoing development
