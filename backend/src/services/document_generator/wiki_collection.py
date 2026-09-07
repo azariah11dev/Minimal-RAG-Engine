@@ -1,7 +1,7 @@
 import os
 import wikipedia
 
-articles = ["OpenAI", "Microsoft"]
+articles = ["Baleen whale"]
 
 def main():
     base_dir = os.path.join(

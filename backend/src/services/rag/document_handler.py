@@ -20,8 +20,7 @@ class documentHandler:
         file_path: str, 
         file_name: str, 
         model_name: str = "BAAI/bge-m3",
-        max_chunk_size=1000, 
-        overlap=200
+        max_chunk_size=2000, 
     ):
         self.file_path = file_path
         self.file_name = file_name
@@ -29,7 +28,7 @@ class documentHandler:
         self.model = SentenceTransformer(model_name)
         #Splitting info
         self.max_chunk_size = max_chunk_size
-        self.overlap = overlap
+        self.overlap = max_chunk_size * 0.15 # overlap is recommended to be 10 - 20% of max_chunk_size
 
     # ------------------------------------------------------------------
     # Document Readers (Preserving structure where possible)

@@ -3,9 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from src.endpoints.document_uploader import doc_uploader
+from src.endpoints.response_generation import response_generation
 
 
-app = FastAPI(title="Task Forge", version="1.0")
+app = FastAPI(title="Mini RAG Engine", version="1.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -35,3 +36,4 @@ def root():
     }
 
 app.include_router(doc_uploader)
+app.include_router(response_generation)

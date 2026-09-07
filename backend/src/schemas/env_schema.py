@@ -15,6 +15,11 @@ class Settings(BaseSettings):
 
     DATABASE_URL: Optional[str] = None
     QDRANT_URL: Optional[str] = None
+    OLLAMA_HOST: Optional[str] = None
+
+    GEMINI_API_KEY: Optional[str] = None
+    OPENAI_API_KEY: Optional[str] = None
+    ANTHROPIC_API_KEY: Optional[str] = None
 
     class Config:
         env_file = str(_env_path / ".env")

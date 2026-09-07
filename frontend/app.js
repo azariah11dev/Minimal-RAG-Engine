@@ -2,18 +2,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const uploadForm = document.getElementById("uploadForm");
     const fileInput = document.getElementById("fileInput");
 
-    setupUploadHandler(uploadForm, fileInput);
+    streamResponse(uploadForm, fileInput);
 
     const responseBox = document.getElementById("responseBox");
     const queryButton = document.getElementById("queryButton");
     const queryInput = document.getElementById("queryInput");
+
+    streamResponse(queryInput, queryButton, responseBox)
 });
 
 
  // -----------------------------
-// Query Handler (under construction ignore for now)
+// Query Handler
 // -----------------------------
-async function streamResponse(query) {
+async function streamResponse(queryInput, queryButton, responseBox) {
     queryButton.addEventListener("click", async () => {
         const query = queryInput.value.trim();
         if (!query) {
@@ -21,23 +23,33 @@ async function streamResponse(query) {
             return;
         }
 
+        responseBox.style.display = "block";
+        responseBox.innerText = ""; // clear previous output
+
         try {
-            const res = await fetch("http://localhost:8000/query", {
+            const res = await fetch("http://localhost:8000/response_generation/answer", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ query })
+                body: JSON.stringify({ question: query })
             });
 
-            const data = await res.json();
-            responseBox.style.display = "block";
-            responseBox.innerText = JSON.stringify(data, null, 2);
+            // DO NOT USE res.json() — it breaks streaming
+            const reader = res.body.getReader();
+            const decoder = new TextDecoder();
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                responseBox.innerText += decoder.decode(value);   // append streamed text
+            }
 
         } catch (err) {
-            responseBox.style.display = "block";
             responseBox.innerText = "Error: " + err;
         }
     });
 }
+
 
 // -----------------------------
 // File Upload Handler
